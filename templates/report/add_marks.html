@@ -1,0 +1,52 @@
+{% extends base_template|default:"base.html" %}
+{% load i18n %}
+<html>
+<head>
+    <title>{{school.name}}</title>
+</head>
+{% block content %}
+
+<h1>Add Marks</h1>
+   
+   <form action="" method="POST">{% csrf_token %}
+  	
+    {{ FAtestform_formset.management_form }}
+   
+<table id="formset" class="form">
+{% for form in FAtestform_formset.forms %}
+  {% if forloop.first %}
+  <thead><tr>
+  <th>Student Name</th>
+    {% for field in form.visible_fields %}
+    <th>{{ field.label|capfirst }}</th>
+    {% endfor %}
+  </tr></thead>
+  {% endif %}
+  {% for students in student %}
+  <tr class="{% cycle row1,row2 %}">
+  <td>{{students.name}}
+  {% for field in form.visible_fields %}
+    <td>
+    {# Include the hidden fields in the form #}
+    {% if forloop.first %}
+      {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+      {% endfor %}
+    {% endif %}
+      {{ field.errors.as_ul }}
+      {{ field }}
+    </td>
+  {% endfor %}
+  </tr>
+  {% endfor %}
+{% endfor %}
+</table>
+
+    <input type="submit" value=" Submit " />
+
+</form>
+  
+    </form>
+   
+</html>
+{% endblock %}

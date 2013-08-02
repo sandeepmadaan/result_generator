@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+<html lang="en">
+<head>
+    <title>Form filled</title>
+</head>
+{% block content %}
+
+<h1 >Form filled</h1>  
+<table>
+<tr>
+<td>
+<input type="button" value="Continue adding the result for same student" onClick="javascript:history.go(-2);">
+</td>
+<td>
+		<input type="button" value="Done" onClick="http://localhost/result/">
+	</td></tr>	
+		</table>
+</body>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends base_template|default:"base.html" %}
+{% load i18n %}
+<html>
+	<head>
+		<title>{{title.name}}</title>
+	</head>
+
+{% block content %}
+	
+	<h2 class="changeBlue">Add Result</h2>
+<table>
+{% for class in clas %}
+			{% for tests in test %}
+ <tr>
+ 	<td><label for="id_search">Class:</label></td>
+ 	<td><select name="form">
+		<option value="">________</option>
+			
+  				<option value="{{class.id}}">{{class.name}}</option>
+			
+		</select>
+	</td>
+	<td><label for="id_test">Tests:</label></td>
+	<td><select name="form1">
+		<option value="">________</option>
+			
+  				<option value="{{tests.id}}">{{tests.name}}</option>
+			
+		</select>
+	</td>
+ </table>
+ 	<input type="button" onClick="location.href='{{ LOCAL_URL }}/res_generator/report/addresult/?class={{class.id}}&test={{tests.id}}'" value="Add Result">
+			{% endfor %}
+			{% endfor %}
+</div>
+</html>
+{% endblock %}
