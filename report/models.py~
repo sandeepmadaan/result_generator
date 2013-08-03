@@ -126,7 +126,7 @@ class FAtestForm(ModelForm):
 		exclude= ['test']
 	
 class FAresult(models.Model):
-	fatest = models.ForeignKey(FAtest)
+	fatest = models.OneToOneField(FAtest)
 	max3_eng = models.FloatField(blank=True,null=True)
 	marks_eng = models.FloatField(blank=True,null=True)
 	total_eng = models.FloatField(blank=True,null=True)

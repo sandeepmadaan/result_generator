@@ -57,64 +57,67 @@ def add_result(request):
 		return render_to_response('report/add_marks.html', temp, 
 		context_instance = RequestContext(request))
 		
-def marks_fill(reques):
+def marks_fill(request):
 	fatest = FAtest.objects.all()
 	for i in range(1,fatest.count()+1):
 	     res = FAtest.objects.get(id =i)
 	     fa_res = FAresult(fatest=res)
 	     fa_res.save()
-	     list1 = ['a_eng','a_pun','a_sst','a_sci','a_math','a_comp','a_draw','a_m_oral']
-	     list2 = ['q_eng','q_pun','q_sst','q_sci','q_math','q_comp','q_draw','q_m_oral']
-	     for act,qp in zip(list1,list2):
-	     	 activity = type(act)
-	     	 result = res.activity
-	     	 qpaper= res.qp
+	     maxm = Maxmarks.objects.filter(test = res.test).filter(clas=res.student.std).values('id')
+	     maxid = Maxmarks.objects.get(id = maxm)
+	     #list1 = ['a_eng','a_pun','a_sst','a_sci','a_math','a_comp','a_draw','a_m_oral']
+	     #list2 = ['q_eng','q_pun','q_sst','q_sci','q_math','q_comp','q_draw','q_m_oral']
+	     list1 = [res.a_eng,res.a_pun,res.a_sst,res.a_sci,res.a_math,res.a_comp,res.a_draw,res.a_m_oral]
+	     list2 = [res.q_eng,res.q_pun,res.q_sst,res.q_sci,res.q_math,res.q_comp,res.q_draw,res.q_m_oral]
+	     list3 = [maxid.a_eng,maxid.a_pun,maxid.a_sst,maxid.a_sci,maxid.a_math,maxid.a_comp,maxid.a_draw,maxid.a_m_oral]
+	     for act,qp,act2 in zip(list1,list2,list3):
+	     	 result = act
+	     	 qpaper= qp
 	     	 ran = result.split(',')
 	     	 temp = [0,0,0,0,0,0,0,0,0,0]
 	     	 j = 0
 	     	 while j<len(ran):
 	     	 	temp[j]=ran[j]
 	     	 	j+=1
-	     	 maxm = Maxmarks.objects.filter(test = res.test).filter(clas=res.student.std).values('id')
-	     	 maxid = Maxmarks.objects.get(id = maxm)
-	     	 maxres = "maxid."+act
+	     	 
+	     	 maxres = act2
 	     	 range_res = maxres.split(',')
 	     	 temp_max = [0,0,0,0,0,0,0,0,0,0]
 	     	 k = 0
 	     	 while k<len(range_res):
 	     	 	temp_max[k]=range_res[k]
 	     	 	k+=1
-	     	 amount1 = float(temp[0])*10/temp_max[0]
-	     	 amount2 = float(temp[1])*10/temp_max[1]
-	     	 amount3 = float(temp[2])*10/temp_max[2]
-	     	 amount4 = float(temp[3])*10/temp_max[3]
-	     	 amount5 = float(temp[4])*10/temp_max[4]
-	     	 amount6 = float(temp[5])*10/temp_max[5]
-	     	 amount7 = float(temp[6])*10/temp_max[6]
-	     	 amount8 = float(temp[7])*10/temp_max[7]
-	     	 amount9 = float(temp[8])*10/temp_max[8]
-	     	 amount10 = float(temp[9])*10/temp_max[9]
+	     	 amount1 = float(temp[0])*10/float(temp_max[0])
+	     	 amount2 = float(temp[1])*10/float(temp_max[1])
+	     	 amount3 = float(temp[2])*10/float(temp_max[2])
+	     	 amount4 = float(temp[3])*10/float(temp_max[3])
+	     	 amount5 = float(temp[4])*10/float(temp_max[4])
+	     	 amount6 = float(temp[5])*10/float(temp_max[5])
+	     	 amount7 = float(temp[6])*10/float(temp_max[6])
+	     	 amount8 = float(temp[7])*10/float(temp_max[7])
+	     	 amount9 = float(temp[8])*10/float(temp_max[8])
+	     	 amount10 = float(temp[9])*10/float(temp_max[9])
 	     	 import heapq
 	     	 amountn = [amount1,amount2,amount3,amount4,amount5,amount6,amount7,amount8,amount9,amount10]
 	     	 large=heapq.nlargest(3,amountn)
 	     	 sum_large = sum(large)
 	     	 fa_marks=round((sum_large+qpaper)*10/40,2)
 	     	 fa_total=fa_marks*10
-	     	 if qp == "q_eng" :
+	     	 if qp == list2[0] :
 	     	 	FAresult.objects.filter(fatest=res).update(max3_eng=large,marks_eng=fa_marks,total_eng=fa_total)
-	     	 elif qp == "q_pun":
+	     	 elif qp == list2[1]:
 	     	 	FAresult.objects.filter(fatest=res).update(max3_pun=large,marks_pun=fa_marks,total_pun=fa_total)
-	     	 elif qp == "q_sst":
+	     	 elif qp == list2[2]:
 	     	 	FAresult.objects.filter(fatest=res).update(max3_sst=large,marks_sst=fa_marks,total_sst=fa_total)
-	     	 elif qp == "q_sci":
+	     	 elif qp == list2[3]:
 	     	 	FAresult.objects.filter(fatest=res).update(max3_sci=large,marks_sci=fa_marks,total_sci=fa_total)
-	     	 elif qp == "q_math":
+	     	 elif qp == list2[4]:
 	     	 	FAresult.objects.filter(fatest=res).update(max3_math=large,marks_math=fa_marks,total_math=fa_total)
-	     	 elif qp == "q_comp":
+	     	 elif qp == list2[5]:
 	     	 	FAresult.objects.filter(fatest=res).update(max3_comp=large,marks_comp=fa_marks,total_comp=fa_total)
-	     	 elif qp == "q_draw":
+	     	 elif qp == list2[6]:
 	     	 	FAresult.objects.filter(fatest=res).update(max3_draw=large,marks_draw=fa_marks,total_draw=fa_total)
-	     	 elif qp == "q_m_oral":
+	     	 elif qp == list2[7]:
 	     	 	FAresult.objects.filter(fatest=res).update(max3_m_oral=large,marks_m_oral=fa_marks,total_m_oral=fa_total)
 	return render_to_response('report/marks_ok.html', temp, context_instance = RequestContext(request))
 	     
