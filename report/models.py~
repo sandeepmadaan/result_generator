@@ -123,47 +123,70 @@ class FAtest(models.Model):
 class FAtestForm(ModelForm):
 	class Meta :
 		model = FAtest
-		exclude= ['test']
+		exclude= ['test',]
+	
 	
 class FAresult(models.Model):
 	fatest = models.OneToOneField(FAtest)
-	max3_eng = models.FloatField(blank=True,null=True)
+	max3_eng = models.CharField(max_length=20,blank=True,null=True)
 	marks_eng = models.FloatField(blank=True,null=True)
 	total_eng = models.FloatField(blank=True,null=True)
-	max3_pun = models.FloatField(blank=True,null=True)
+	max3_pun = models.CharField(max_length=20,blank=True,null=True)
 	marks_pun = models.FloatField(blank=True,null=True)
 	total_pun = models.FloatField(blank=True,null=True)
-	max3_sst = models.FloatField(blank=True,null=True)
+	max3_sst = models.CharField(max_length=20,blank=True,null=True)
 	marks_sst = models.FloatField(blank=True,null=True)
 	total_sst = models.FloatField(blank=True,null=True)
-	max3_sci = models.FloatField(blank=True,null=True)
+	max3_sci = models.CharField(max_length=20,blank=True,null=True)
 	marks_sci = models.FloatField(blank=True,null=True)
 	total_sci = models.FloatField(blank=True,null=True)
-	max3_math = models.FloatField(blank=True,null=True)
+	max3_math = models.CharField(max_length=20,blank=True,null=True)
 	marks_math = models.FloatField(blank=True,null=True)
 	total_math = models.FloatField(blank=True,null=True)
-	max3_comp = models.FloatField(blank=True,null=True)
+	max3_comp = models.CharField(max_length=20,blank=True,null=True)
 	marks_comp = models.FloatField(blank=True,null=True)
 	total_comp = models.FloatField(blank=True,null=True)
-	max3_draw = models.FloatField(blank=True,null=True)
+	max3_draw = models.CharField(max_length=20,blank=True,null=True)
 	marks_draw = models.FloatField(blank=True,null=True)
 	total_draw = models.FloatField(blank=True,null=True)
-	max3_m_oral = models.FloatField(blank=True,null=True)
+	max3_m_oral = models.CharField(max_length=20,blank=True,null=True)
 	marks_m_oral = models.FloatField(blank=True,null=True)
 	total_m_oral = models.FloatField(blank=True,null=True)
 	
 class SAtest(models.Model):
 	student = models.ForeignKey(Student)
 	test = models.ForeignKey(Tests)
-	q_eng = models.IntegerField()
-	q_pun = models.IntegerField()
-	q_sst = models.IntegerField()
-	q_sci = models.IntegerField()
-	q_math = models.IntegerField()
-	q_comp = models.IntegerField()
-	q_draw = models.IntegerField()
-	q_m_oral = models.IntegerField()
+	q_eng = models.FloatField(default="0.0")
+	q_pun = models.FloatField(default="0.0")
+	q_sst = models.FloatField(default="0.0")
+	q_sci = models.FloatField(default="0.0")
+	q_math = models.FloatField(default="0.0")
+	q_comp = models.FloatField(default="0.0")
+	q_draw = models.FloatField(default="0.0")
+	q_m_oral = models.FloatField(default="0.0")
 	
-	
+class SAtestForm(ModelForm):
+	class Meta :
+		model = SAtest
+		exclude= ['test',]
 
+class SAresult(models.Model):
+	fatest = models.OneToOneField(SAtest)
+	marks_eng = models.FloatField(blank=True,null=True)
+	total_eng = models.FloatField(blank=True,null=True)
+	marks_pun = models.FloatField(blank=True,null=True)
+	total_pun = models.FloatField(blank=True,null=True)
+	marks_sst = models.FloatField(blank=True,null=True)
+	total_sst = models.FloatField(blank=True,null=True)
+	marks_sci = models.FloatField(blank=True,null=True)
+	total_sci = models.FloatField(blank=True,null=True)
+	marks_math = models.FloatField(blank=True,null=True)
+	total_math = models.FloatField(blank=True,null=True)
+	marks_comp = models.FloatField(blank=True,null=True)
+	total_comp = models.FloatField(blank=True,null=True)
+	marks_draw = models.FloatField(blank=True,null=True)
+	total_draw = models.FloatField(blank=True,null=True)
+	marks_m_oral = models.FloatField(blank=True,null=True)
+	total_m_oral = models.FloatField(blank=True,null=True)
 		
+class 

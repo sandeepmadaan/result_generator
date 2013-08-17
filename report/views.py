@@ -30,34 +30,47 @@ def sel_type(request):
 	context_instance= RequestContext(request))
 		
 def add_result(request):
-	class RequiredFormSet(BaseFormSet):
-		def __init__(self, *args, **kwargs):
-			super(RequiredFormSet, self).__init__(*args, **kwargs)
-			for form in self.forms:
-				form.empty_permitted = False
+	
 	clas = Class.objects.get(id=request.GET['class'])
 	test = Tests.objects.get(id=request.GET['test'])
 	student = Student.objects.filter(std=clas.id)
+	#for students in student:
+	#	student_id = Student.objects.get(id=students.id)
 	if test.id == 3 or test.id == 6:
-		pass
-	else :
-		FAtestFormSet = formset_factory(FAtestForm, max_num=30, formset=RequiredFormSet)
-		if request.method == 'POST':
-			FAtestform_formset = FAtestFormSet(request.POST, request.FILES)
-			if FAtestform_formset.is_valid() :
-				for form in FAtestform_formset.forms:
+		for students in student:
+			stu = Student.objects.get(id=students.id)
+			if request.method == 'POST':
+				form = SAtestForm(request.POST)
+				if form.is_valid() :
 					marks = form.save(commit=False)
-    				marks.test = test
-    				marks.save()
-			return render_to_response('report/marks_filled.html',
-			{'form':form,'student':student}, context_instance=RequestContext(request))
-		else:
-			FAtestform_formset = FAtestFormSet()
-		temp = {'FAtestform_formset': FAtestform_formset, 'student':student }
-		return render_to_response('report/add_marks.html', temp, 
-		context_instance = RequestContext(request))
+					marks.test = test					
+					marks.save()
+					return HttpResponseRedirect(reverse('result_generator.report.views.add_result'))
+			else:
+				form = SAtestForm()
+			temp = {'form': form, 'student':stu,'test':test }
+			return render_to_response('report/add_marks.html', temp, 
+			context_instance = RequestContext(request))
+	else :
+		for students in student:
+			stu = Student.objects.get(id=students.id)
+			if request.method == 'POST':
+				form = FAtestForm(request.POST)
+				if form.is_valid() :
+					marks = form.save(commit=False)
+					marks.test = test					
+					marks.save()
+			else:
+				form = FAtestForm()
+			temp = {'form': form, 'student':stu,'test':test }
+			return render_to_response('report/add_marks.html', temp, 
+			context_instance = RequestContext(request))
+		return render_to_response('report/marks_filled.html',
+		{'student':student}, context_instance=RequestContext(request))
+	
 		
 def marks_fill(request):
+	FAresult.objects.all().delete()
 	fatest = FAtest.objects.all()
 	for i in range(1,fatest.count()+1):
 	     res = FAtest.objects.get(id =i)
@@ -65,12 +78,12 @@ def marks_fill(request):
 	     fa_res.save()
 	     maxm = Maxmarks.objects.filter(test = res.test).filter(clas=res.student.std).values('id')
 	     maxid = Maxmarks.objects.get(id = maxm)
-	     #list1 = ['a_eng','a_pun','a_sst','a_sci','a_math','a_comp','a_draw','a_m_oral']
+	     list4 = ['a_eng','a_pun','a_sst','a_sci','a_math','a_comp','a_draw','a_m_oral']
 	     #list2 = ['q_eng','q_pun','q_sst','q_sci','q_math','q_comp','q_draw','q_m_oral']
 	     list1 = [res.a_eng,res.a_pun,res.a_sst,res.a_sci,res.a_math,res.a_comp,res.a_draw,res.a_m_oral]
 	     list2 = [res.q_eng,res.q_pun,res.q_sst,res.q_sci,res.q_math,res.q_comp,res.q_draw,res.q_m_oral]
 	     list3 = [maxid.a_eng,maxid.a_pun,maxid.a_sst,maxid.a_sci,maxid.a_math,maxid.a_comp,maxid.a_draw,maxid.a_m_oral]
-	     for act,qp,act2 in zip(list1,list2,list3):
+	     for act,qp,act2,act3 in zip(list1,list2,list3,list4):
 	     	 result = act
 	     	 qpaper= qp
 	     	 ran = result.split(',')
@@ -103,26 +116,59 @@ def marks_fill(request):
 	     	 sum_large = sum(large)
 	     	 fa_marks=round((sum_large+qpaper)*10/40,2)
 	     	 fa_total=fa_marks*10
-	     	 if qp == list2[0] :
+	     	 if act3=='a_eng':
 	     	 	FAresult.objects.filter(fatest=res).update(max3_eng=large,marks_eng=fa_marks,total_eng=fa_total)
-	     	 elif qp == list2[1]:
+	     	 elif act3=='a_pun':
 	     	 	FAresult.objects.filter(fatest=res).update(max3_pun=large,marks_pun=fa_marks,total_pun=fa_total)
-	     	 elif qp == list2[2]:
+	     	 elif act3=='a_sst':
 	     	 	FAresult.objects.filter(fatest=res).update(max3_sst=large,marks_sst=fa_marks,total_sst=fa_total)
-	     	 elif qp == list2[3]:
+	     	 elif act3=='a_sci':
 	     	 	FAresult.objects.filter(fatest=res).update(max3_sci=large,marks_sci=fa_marks,total_sci=fa_total)
-	     	 elif qp == list2[4]:
+	     	 elif act3=='a_math':
 	     	 	FAresult.objects.filter(fatest=res).update(max3_math=large,marks_math=fa_marks,total_math=fa_total)
-	     	 elif qp == list2[5]:
+	     	 elif act3=='a_comp':
 	     	 	FAresult.objects.filter(fatest=res).update(max3_comp=large,marks_comp=fa_marks,total_comp=fa_total)
-	     	 elif qp == list2[6]:
+	     	 elif act3=='a_draw':
 	     	 	FAresult.objects.filter(fatest=res).update(max3_draw=large,marks_draw=fa_marks,total_draw=fa_total)
-	     	 elif qp == list2[7]:
+	     	 elif act3=='a_m_oral':
 	     	 	FAresult.objects.filter(fatest=res).update(max3_m_oral=large,marks_m_oral=fa_marks,total_m_oral=fa_total)
-	return render_to_response('report/marks_ok.html', temp, context_instance = RequestContext(request))
+	return render_to_response('report/marks_ok.html', context_instance = RequestContext(request))
 	     
-	     
-
+	    
+def sa_marks_fill(request):
+	SAresult.objects.all().delete()
+	satest = SAtest.objects.all()
+	for i in range(1,satest.count()+1):
+		 res = SAtest.objects.get(id =i)
+	     sa_res = SAresult(satest=res)
+	     sa_res.save()
+	     maxm = Maxmarks.objects.filter(test = res.test).filter(clas=res.student.std).values('id')
+	     maxid = Maxmarks.objects.get(id = maxm)
+	     list1 = [res.q_eng,res.q_pun,res.q_sst,res.q_sci,res.q_math,res.q_comp,res.q_draw,res.q_m_oral]
+	     list2 = [maxid.q_eng,maxid.q_pun,maxid.q_sst,maxid.q_sci,maxid.q_math,maxid.q_comp,maxid.q_draw,maxid.q_m_oral]
+	     list3 = ['q_eng','q_pun','q_sst','q_sci','q_math','q_comp','q_draw','q_m_oral']
+	     for qp,qp2,qp3 in zip(list1,list2,list3):
+	     	sa_marks=qp*30/qp2
+	     	sa_total=sa_marks*3.33
+	     	 if qp3=='q_eng':
+	     	 	SAresult.objects.filter(satest=res).update(marks_eng=sa_marks,total_eng=sa_total)
+	     	 elif qp3=='q_pun':
+	     	 	SAresult.objects.filter(satest=res).update(marks_pun=sa_marks,total_pun=sa_total)
+	     	 elif qp3=='q_sst':
+	     	 	SAresult.objects.filter(satest=res).update(marks_sst=sa_marks,total_sst=sa_total)
+	     	 elif qp3=='q_sci':
+	     	 	SAresult.objects.filter(satest=res).update(marks_sci=sa_marks,total_sci=sa_total)
+	     	 elif qp3=='q_math':
+	     	 	SAresult.objects.filter(satest=res).update(marks_math=sa_marks,total_math=sa_total)
+	     	 elif qp3=='q_comp':
+	     	 	SAresult.objects.filter(satest=res).update(marks_comp=sa_marks,total_comp=sa_total)
+	     	 elif qp3=='q_draw':
+	     	 	SAresult.objects.filter(satest=res).update(marks_draw=sa_marks,total_draw=sa_total)
+	     	 elif qp3=='q_m_oral':
+	     	 	SAresult.objects.filter(satest=res).update(marks_m_oral=sa_marks,total_m_oral=sa_total)
+	return render_to_response('report/marks_ok.html', context_instance = RequestContext(request))
+	  
+	     	 	
 def search(request):
 	"""
 	** search **

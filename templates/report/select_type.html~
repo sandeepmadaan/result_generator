@@ -8,30 +8,31 @@
 {% block content %}
 	
 	<h2 class="changeBlue">Add Result</h2>
+	<form method="GET" action="http://localhost/res_generator/report/addresult/" onsubmit="alert(action+'?'+'class'+'='+form.value+'&'+'test'+'='+form1.value);return true;">
 <table>
-{% for class in clas %}
-			{% for tests in test %}
+	
  <tr>
  	<td><label for="id_search">Class:</label></td>
- 	<td><select name="form">
+ 	<td><select name="class">
 		<option value="">________</option>
-			
+			{% for class in clas %}
   				<option value="{{class.id}}">{{class.name}}</option>
-			
+			{% endfor %}
 		</select>
+		
 	</td>
 	<td><label for="id_test">Tests:</label></td>
-	<td><select name="form1">
+	<td><select name="test">
 		<option value="">________</option>
-			
+			{% for tests in test %}
   				<option value="{{tests.id}}">{{tests.name}}</option>
-			
+			{% endfor %}
 		</select>
 	</td>
  </table>
- 	<input type="button" onClick="location.href='{{ LOCAL_URL }}/res_generator/report/addresult/?class={{class.id}}&test={{tests.id}}'" value="Add Result">
-			{% endfor %}
-			{% endfor %}
+ 	<input type="submit">
+		</form>	
+			
 </div>
 </html>
 {% endblock %}

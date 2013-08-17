@@ -68,6 +68,17 @@ class MaxmarksAdmin(admin.ModelAdmin):
 	search_fields = ('test',)
 	list_filter = ['test']
 
+class FAtestAdmin(admin.ModelAdmin):
+	list_display = ('test','student','q_eng','a_eng','q_pun','a_pun','q_sst','a_sst','q_sci','a_sci','q_math',
+	'a_math','q_comp','a_comp','q_draw','a_draw','q_m_oral','a_m_oral' )
+	search_fields = ('test',)
+	list_filter = ['test']
+	
+class SAtestAdmin(admin.ModelAdmin):
+	list_display = ('test','student','q_eng','q_pun','q_sst','q_sci','q_math',
+	'q_comp','q_draw','q_m_oral', )
+	search_fields = ('test',)
+	list_filter = ['test']
 
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Subjects, SubjectsAdmin)
@@ -75,4 +86,5 @@ admin.site.register(Tests, TestsAdmin)
 admin.site.register(Organisation, OrganisationAdmin)
 admin.site.register(Class, ClassAdmin)
 admin.site.register(Maxmarks, MaxmarksAdmin)
-
+admin.site.register(FAtest, FAtestAdmin)
+admin.site.register(SAtest, SAtestAdmin)
