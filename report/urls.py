@@ -23,6 +23,7 @@ urlpatterns = patterns('result_generator.report.views',
 	(r'^seltype/$', 'sel_type'),
 	(r'^addresult/$', 'add_result'),
 	(r'^gen_res/$', 'marks_fill'),
+	(r'^add_skills/$', 'add_skills'),
    #(r'^publishers/$', PublisherDetail.as_view()),
 )
 

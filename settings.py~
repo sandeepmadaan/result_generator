@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'pps',                      # Or path to database file if using sqlite3.
+        'NAME': 'res_generator',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': 'a',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -101,10 +101,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'pps.urls'
+ROOT_URLCONF = 'result_generator.urls'
 
 TEMPLATE_DIRS = (
-    "/home/sandy/pps/templates/", # Change this to your own directory.
+    "/home/sandy/result_generator/templates/", # Change this to your own directory.
 
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
@@ -116,7 +116,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',    
-    'pps.school', 
+    'result_generator.report', 
     #'django.contrib.messages',
     #'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
